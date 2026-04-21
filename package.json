@@ -1,0 +1,24 @@
+{
+  "name": "clinica-medica",
+  "version": "1.0.0",
+  "description": "gestion de una clinica medica",
+  "homepage": "https://github.com/Faacusb/clinica-medica#readme",
+  "bugs": {
+    "url": "https://github.com/Faacusb/clinica-medica/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Faacusb/clinica-medica.git"
+  },
+  "license": "ISC",
+  "author": "Joaquin,Emiliano.Mariano,Malena,Facundo",
+  "type": "commonjs",
+  "main": "especialidades.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mysql2": "^3.22.2"
+  }
+}
