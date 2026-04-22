@@ -12,10 +12,11 @@
   },
   "license": "ISC",
   "author": "Joaquin,Emiliano.Mariano,Malena,Facundo",
-  "type": "commonjs",
+  "type": "module",
   "main": "especialidades.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/especialidades.js"
   },
   "dependencies": {
     "express": "^5.2.1",

@@ -1,27 +1,31 @@
 import express from "express";
 import mysql from "mysql2/promise";
+import conexion  from "./config/database.js";
 
 const app = express();
 
 app.use(express.json());
 
-const conexion = await mysql.createConnection({
+//esto no hace falta porque ya importamos la conexion desde el database.js
+
+/*const conexion = await mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "root",
     database: "prog3_turnos"
-});
+});*/
 
 // //  lista por id todoas las especialidades cargfadas  en la base de datos   OK
 app.get('/especialidades', async (req, res) => {
 try {
         const [rows] = await conexion.execute(
-            "SELECT * FROM especialidades"
+            "SELECT * FROM especialidades WHERE activo = 1"
         ); 
         res.send({
             estado: "OK",
             data :rows
         });
+        console.table(rows);
  }catch (error) {
     console.log(error);
     res.status(500).send({
@@ -61,13 +65,14 @@ try {
 }
 });
 
-// // // put  ediatar una  especialidad por su  id   
+// // // put  editar una  especialidad por su  id   
 app.put('/especialidades/:id', async (req, res) => {
-    const { nombre } = req.body;
+    const {nombre} = req.body; //prueba
     const id = Number(req.params.id);
+    
 try {
         const [result] = await conexion.execute(
-            "UPDATE especialidades SET nombre = ? WHERE id_especialidades = ?",
+            "UPDATE especialidades SET nombre = ? WHERE id_especialidad = ?",
             
 
 
@@ -83,7 +88,7 @@ try {
             estado: "OK",
             msg: "Actualizada correctamente"
         });
-
+        
     } catch (error) {
         console.log(error);
         res.status(500).send({
@@ -101,7 +106,7 @@ try {
    const { id } = req.params;     
     
 const [result] = await conexion.execute(
-"DELETE FROM `especialidades` WHERE id_especialidades =?;"
+"UPDATE especialidades SET activo = 0 WHERE id_especialidad = ?",
    
 
 [ id]
@@ -146,11 +151,13 @@ const crearEspecialidad = async (req, res) => {
     }
 };
 
+
+
+
 app.post('/especialidades', crearEspecialidad);
 app.listen(3000, () => {
     console.log("Servidor en puerto 3000");
 });
-
 
 
 
