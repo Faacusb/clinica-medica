@@ -1,23 +1,15 @@
 import express from "express";
-import mysql from "mysql2/promise";
-import conexion  from "./config/database.js";
+import conexion from "./config/database.js";
+import morgan from "morgan"; // 1. Morgan para el control y monitoreo de errores
 
 const app = express();
 
 app.use(express.json());
+app.use(morgan('dev')); // 2. Inicia Morgan como Dev
 
-//esto no hace falta porque ya importamos la conexion desde el database.js
-
-/*const conexion = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "prog3_turnos"
-});*/
-
-// //  lista por id todoas las especialidades cargfadas  en la base de datos   OK
+// Lista todas las especialidades activas
 app.get('/especialidades', async (req, res) => {
-try {
+    try {
         const [rows] = await conexion.execute(
             "SELECT * FROM especialidades WHERE activo = 1"
         ); 
@@ -26,56 +18,51 @@ try {
             data :rows
         });
         console.table(rows);
- }catch (error) {
-    console.log(error);
-    res.status(500).send({
-        estado: "ERROR",
-        msg: "No se pueden  obtener las especialidades"
-    });
-}
+    } catch (error) {
+        console.error("DETALLE:", error.sqlMessage || error); // 3. Modificado info precisa
+        res.status(500).send({
+            estado: "ERROR",
+            msg: "No se pueden obtener las especialidades"
+        });
+    }
 });
 
-// buscar por el ID  LA ESPECIALIDAD  una 
+// Buscar por ID
 app.get('/especialidades/:id', async (req, res) => {
     const { id } = req.params;
-try {
+    try {
         const [rows] = await conexion.execute(
-            "SELECT * FROM especialidades WHERE  id_especialidad = ?",
-           
-            
+            "SELECT * FROM especialidades WHERE id_especialidad = ?",
             [id]
         );
 
- if (rows.length === 0) {
-    return res.status(404).send({
-        estado: "ERROR",
-        msg: "Especialidad no encontrada"
-    });
-} 
+        if (rows.length === 0) {
+            return res.status(404).send({
+                estado: "ERROR",
+                msg: "Especialidad no encontrada"
+            });
+        } 
         res.send({
             estado: "OK",
             data :rows[0]
         });
- }catch (error) {
-    console.log(error);
-    res.status(500).send({
-        estado: "ERROR",
-        msg: "No se pueden  obtener la especialidad"
-    });
-}
+    } catch (error) {
+        console.error("DETALLE:", error.sqlMessage || error);
+        res.status(500).send({
+            estado: "ERROR",
+            msg: "No se pueden obtener la especialidad"
+        });
+    }
 });
 
-// // // put  editar una  especialidad por su  id   
+// Editar especialidad
 app.put('/especialidades/:id', async (req, res) => {
-    const {nombre} = req.body; //prueba
+    const {nombre} = req.body; 
     const id = Number(req.params.id);
     
-try {
+    try {
         const [result] = await conexion.execute(
             "UPDATE especialidades SET nombre = ? WHERE id_especialidad = ?",
-            
-
-
             [nombre, id]
         );
         if (result.affectedRows === 0) {
@@ -88,46 +75,36 @@ try {
             estado: "OK",
             msg: "Actualizada correctamente"
         });
-        
     } catch (error) {
-        console.log(error);
+        console.error("DETALLE:", error.sqlMessage || error);
         res.status(500).send({
             estado: "ERROR",
-           
         });
     }
 });
 
-// delete eliminar una especialidad por su id 
- app.delete ('/especialidades/:id', async (req, res) => {
-   
-    console.log ("especialidades ")
+// Eliminar (Baja lógica)
+app.delete ('/especialidades/:id', async (req, res) => {
     try {
-   const { id } = req.params;     
-    
-const [result] = await conexion.execute(
-"UPDATE especialidades SET activo = 0 WHERE id_especialidad = ?",
-   
-
-[ id]
-
-);
- res.send({
+        const { id } = req.params;     
+        const [result] = await conexion.execute(
+            "UPDATE especialidades SET activo = 0 WHERE id_especialidad = ?",
+            [id]
+        );
+        res.send({
             estado: "OK",
-            msg: "Especialidad  eliminada correctamente"
+            msg: "Especialidad eliminada correctamente"
         });
-
- }catch (error) {
-
-    console.log(error);
-    res.status(500).send({
-        estado: "ERROR",
-        msg: "No se pudo eliminar la especialidad"
-    });
-}
+    } catch (error) {
+        console.error("DETALLE:", error.sqlMessage || error);
+        res.status(500).send({
+            estado: "ERROR",
+            msg: "No se pudo eliminar la especialidad"
+        });
+    }
 });
 
-// post crar la especialidad  OK
+// Crear especialidad
 const crearEspecialidad = async (req, res) => {
     const { nombre } = req.body;
     try {
@@ -139,23 +116,17 @@ const crearEspecialidad = async (req, res) => {
             estado: "OK",
             msg: "Especialidad creada correctamente"
         });
-
     } catch (error) {
-        console.log(error);
-
+        console.error("DETALLE:", error.sqlMessage || error);
         res.status(500).send({
             estado: "ERROR",
-        
- msg: "No se pudo crear la especialidad"
+            msg: "No se pudo crear la especialidad"
         });
     }
 };
 
-
-
-
 app.post('/especialidades', crearEspecialidad);
+
 app.listen(3000, () => {
     console.log("Servidor en puerto 3000");
 });
-
