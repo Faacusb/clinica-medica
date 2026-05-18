@@ -84,15 +84,14 @@ app.delete('/obras_sociales/:id', async (req, res) => {
 }
 });
 
-
-// // crear una  obras social  reviasar 
+// // crear una  obras social   OK
  
-app.post('/obras-sociales', async (req, res) => {
-    const {  id_obra_social, nombre, descripcion,porcentaje_descuento,es_particular,activo } = req.body;
+app.post('/obras_sociales', async (req, res) => {
+    const { nombre, descripcion,porcentaje_descuento,es_particular,activo } = req.body;
     try {
         await conexion.execute(
-            "INSERT INTO obras_sociales (id_obra_social, nombre, descripcion, porcentaje_descuento, es_particular, activo) VALUES (?, ?, ?, ?, ?, ?)",
-            [id_obra_social, nombre, descripcion, porcentaje_descuento, es_particular, activo]
+            "INSERT INTO obras_sociales ( nombre, descripcion, porcentaje_descuento, es_particular, activo) VALUES (?, ?, ?, ?, ?)",
+            [ nombre, descripcion, porcentaje_descuento, es_particular, activo]
         );
         res.send({
             estado: "OK",
@@ -110,7 +109,7 @@ app.post('/obras-sociales', async (req, res) => {
     }
 });
 
-// // //  editar una obra social  revisra
+// // //  editar una obra social   OK
 app.put('/obras_sociales/:id', async (req, res) => { 
     const {   nombre, descripcion,porcentaje_descuento,es_particular,activo } = req.body;
      const { id } = req.params;
