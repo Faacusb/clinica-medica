@@ -66,10 +66,7 @@ export default class EspecialidadesController {
                 }));
             }
             
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al editar la especialidad"
-            });
+            res.status(500).json(JSendResponse.error("Error interno del servidor al editar la especialidad"));
         }
     }
 
@@ -78,18 +75,14 @@ export default class EspecialidadesController {
             const { id } = req.params;
             const especialidadEliminada = await this.especialidades.eliminarEspecialidad(id);
             if (especialidadEliminada.affectedRows === 0) {
-                return res.status(404).json({ estado: "ERROR", mensaje: `Especialidad con ID: ${id} no encontrada` });
+                return res.status(404).json(JSendResponse.fail(`Especialidad con ID: ${id} no encontrada`));
             }
-            res.status(200).json({
-                estado: "OK",
-                mensaje: "Especialidad eliminada exitosamente"
-            });
+            res.status(200).json(JSendResponse.success({ 
+                message: `Especialidad con ID: ${id} eliminada exitosamente`
+            }));
         } catch (error) {
             console.error("ERROR: error al eliminar especialidad",error);
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al eliminar la especialidad"
-            });
+            res.status(500).json(JSendResponse.error("Error interno del servidor al eliminar la especialidad"));
+            };
         }
-    }
 }
