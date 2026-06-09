@@ -1,50 +1,69 @@
 import obrasSocialesModel from "../database/obrasSocialesModel.js";
 
-export default class ObrasSocialesService {
+export default class obrasSocialesService {
 
-
-
-    listar = async () => {
-        const [rows] = await conexion.execute(
-            "SELECT * FROM obras_sociales"
-        );
-        return rows;
+    constructor(){
+        this.obrasSociales = new obrasSocialesModel();
     }
 
-    obtenerPorId = async (id) => {
-        const [rows] = await conexion.execute(
-            "SELECT * FROM obras_sociales WHERE id = ?",
-            [id]
-        );
-        return rows;
+   listarObrasSociales= () => {
+        try {
+            return this.obrasSociales.listarObrasSociales();
+
+        } catch (error) {
+
+            console.error("ERROR: error en obrasSocialesModell listar obrasSociales",error);
+            throw new Error("Error al obtener la lista de obrasSociales");
+        }
+        
+
+  obtenerPorId = (id) => {
+        try {
+            if (!id || isNaN(parseInt(id))) {
+                throw new Error('ID inválido proporcionado');
+            }
+
+            return this.obrasSociales. obtenerPorId (id);
+
+        } catch (error) {
+
+            console.error("ERROR: error en obrasSocialesModel al obtener obrasSociales por ID",error);
+            throw new Error("Error al obtener la obraSociales por ID");
+        }
     }
 
-    crear = async (nombre, descripcion, descuento, es_particular, activo) => {
-        const [result] = await conexion.execute(
-            `INSERT INTO obras_sociales
-            (nombre, descripcion, porcentaje_descuento, es_particular, activo)
-            VALUES (?, ?, ?, ?, ?)`,
-            [nombre, descripcion, descuento, es_particular, activo]
-        );
-        return result;
+     crearObraSocial= (nombre) => {
+        try {
+            return this.obrasSociales.crearObraSocial (nombre);
+        } catch (error) {
+            console.error("ERROR: error en obrasSocialesModel  al crear obrasSociales",error);
+            throw new Error("Error al crear la obrasSociales");
+        }
     }
 
-    editar = async (id, nombre, descripcion, descuento, es_particular, activo) => {
-        const [result] = await conexion.execute(
-            `UPDATE obras_sociales
-            SET nombre=?, descripcion=?, porcentaje_descuento=?, es_particular=?, activo=?
-            WHERE id=?`,
-            [nombre, descripcion, descuento, es_particular, activo, id]
-        );
-        return result;
+    editarObraSociales = (id, nombre) => {
+        try {
+            if (!id || isNaN(parseInt(id))) {
+                throw new Error('ID inválido proporcionado');
+            }
+            return this.obrasSociales.editarObraSociales(id, nombre);
+        } catch (error) {
+            console.error("ERROR: error en  obrasSocialesModel al editar obrasSociales",error);
+            throw new Error("Error al editar la obrasSociales");
+        }
     }
 
-    eliminar = async (id) => {
-        const [result] = await conexion.execute(
-            "DELETE FROM obras_sociales WHERE id=?",
-            [id]
-        );
-        return result;
+    eliminarObrasSociales= (id) => {
+        try {
+            if (!id || isNaN(parseInt(id))) {
+                throw new Error('ID inválido proporcionado');
+            }
+            return this.obrasSociales.eliminarObrasSociales(id);
+        } catch (error) {
+            console.error("ERROR: error en obrasSocialesModel al eliminar especialidad",error);
+            throw new Error("Error al eliminar la obrasSociales");
+        }
     }
-}
 
+
+} }

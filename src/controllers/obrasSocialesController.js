@@ -3,12 +3,12 @@ import ObrasSocialesService from "../services/obrasSocialesService.js";
 export default class ObrasSocialesController {
 
     constructor() {
-        this.service = new ObrasSocialesService();
+        this.obrasSociales  = new ObrasSocialesService();
     }
 
-    listar = async (req, res) => {
+    listarObrasSociales = async (req, res) => {
         try {
-            const data = await this.service.listar();
+            const data = await this.obrasSociales.listarObrasSociales();
 
             res.status(200).json({
                 estado: "OK",
@@ -43,9 +43,9 @@ export default class ObrasSocialesController {
         }
     }
 
-    crear = async (req, res) => {
+     crearObraSocial = async (req, res) => {
         try {
-            const data = await this.service.crear(req.body);
+            const data = await this.service. crearObraSocial(req.body);
 
             res.status(201).json({
                 estado: "OK",
@@ -59,9 +59,9 @@ export default class ObrasSocialesController {
         }
     }
 
-    editar = async (req, res) => {
+     editarObraSociales = async (req, res) => {
         try {
-            const data = await this.service.editar(
+            const data = await this.service. editarObraSociales(
                 req.params.id,
                 req.body
             );
@@ -78,9 +78,9 @@ export default class ObrasSocialesController {
         }
     }
 
-    eliminar = async (req, res) => {
+    eliminarObrasSociales= async (req, res) => {
         try {
-            const data = await this.service.eliminar(req.params.id);
+            const data = await this.service.eliminarObrasSociales (req.params.id);
 
             res.status(200).json({
                 estado: "OK",

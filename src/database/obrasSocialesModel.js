@@ -2,7 +2,8 @@ import conexion from "../config/database.js";
 
 export default class ObrasSocialesModel {
 
-    listarObras_sociales = async () => {
+
+      listarObrasSociales = async () => {
         const query =
             "SELECT id_obra_social, nombre, descripcion, porcentaje_descuento, es_particular FROM obras_sociales WHERE activo = 1";
 
@@ -20,7 +21,7 @@ export default class ObrasSocialesModel {
         return rows;
     }
 
-    crearObra_social = async (
+    crearObraSociales = async (
         nombre,
         descripcion,
         porcentaje_descuento,
@@ -62,15 +63,16 @@ export default class ObrasSocialesModel {
         return result;
     }
 
-    editarObra_social = async (
+       editarObraSociales = async (
         id,
         nombre,
         descripcion,
         porcentaje_descuento,
         es_particular,
         activo
-    ) => {
 
+    ) => {
+ 
         const query = `
         UPDATE obras_sociales
         SET
@@ -97,7 +99,7 @@ export default class ObrasSocialesModel {
         return result;
     }
 
-    eliminarObra_social = async (id) => {
+      eliminarObrasSociales  = async (id) => {
 
         const query =
             "UPDATE obras_sociales SET activo = 0 WHERE id_obra_social = ?";
@@ -107,3 +109,7 @@ export default class ObrasSocialesModel {
         return result;
     }
 }
+
+
+
+

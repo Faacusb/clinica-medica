@@ -9,7 +9,7 @@ const obrasSocialesController = new ObrasSocialesController();
 // listar obras sociales
 router.get(
     "/",
-    obrasSocialesController.listar
+    obrasSocialesController.listarObrasSociales
 );
 
 // buscar por id
@@ -22,21 +22,21 @@ router.get(
 // crear nueva obra social
 router.post(
     "/",
-    obrasSocialesController.crear
+    obrasSocialesController.crearObraSocial
 );
 
 // editar obra social
 router.put(
     "/:id",
     param("id").isInt().withMessage("El ID debe ser numérico"),
-    obrasSocialesController.editar
+    obrasSocialesController.editarObraSociales
 );
 
 // eliminar obra social 
 router.delete(
     "/:id",
     param("id").isInt().withMessage("El ID debe ser numérico"),
-    obrasSocialesController.eliminar
+    obrasSocialesController.eliminarObrasSociales
 );
 
 export default router;
