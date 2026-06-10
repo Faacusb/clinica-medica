@@ -14,15 +14,15 @@ export default class EspecialidadesModel {
         return rows;
     }
 
-    crearEspecialidad = async ( nombre, activo=1) => {
-        // Buscar el último ID
-        const [rows] = await conexion.execute("SELECT MAX(id_especialidad) AS maxId FROM especialidades");
-        const nuevoId = (rows[0].maxId || 0) + 1;
+    crearEspecialidad = async ( nombre) => {
+        const query = "INSERT INTO especialidades (nombre) VALUES (?)";
+        const [result] = await conexion.execute(query, [nombre]);
 
-        // Insertar con el nuevo ID
-        const query = "INSERT INTO especialidades (id_especialidad, nombre, activo) VALUES (?, ?, ?)";
-        const [result] = await conexion.execute(query, [nuevoId, nombre, activo]);
-        return result;
+        if (result.affectedRows === 0){
+            return null;
+        }
+
+        return result.insertId;
     }
 
     editarEspecialidad = async (id, nombre,) => {

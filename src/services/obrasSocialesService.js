@@ -15,15 +15,15 @@ export default class obrasSocialesService {
             console.error("ERROR: error en obrasSocialesModell listar obrasSociales",error);
             throw new Error("Error al obtener la lista de obrasSociales");
         }
-        
+    }
 
   obtenerPorId = (id) => {
         try {
             if (!id || isNaN(parseInt(id))) {
                 throw new Error('ID inválido proporcionado');
             }
-
-            return this.obrasSociales. obtenerPorId (id);
+            const datos = this.obrasSociales.obtenerPorId(id);
+            return datos;
 
         } catch (error) {
 
@@ -32,21 +32,22 @@ export default class obrasSocialesService {
         }
     }
 
-     crearObraSocial= (nombre) => {
+     crearObraSocial= async(nombre,descripcion,porcentaje_descuento,es_particular) => {
         try {
-            return this.obrasSociales.crearObraSocial (nombre);
+            const nuevo_id = await this.obrasSociales.crearObraSocial(nombre, descripcion, porcentaje_descuento, es_particular);
+            return this.obrasSociales.obtenerPorId(nuevo_id);
         } catch (error) {
             console.error("ERROR: error en obrasSocialesModel  al crear obrasSociales",error);
             throw new Error("Error al crear la obrasSociales");
         }
     }
 
-    editarObraSociales = (id, nombre) => {
+    editarObraSociales = ( nombre, descripcion, porcentaje_descuento, es_particular) => {
         try {
             if (!id || isNaN(parseInt(id))) {
                 throw new Error('ID inválido proporcionado');
             }
-            return this.obrasSociales.editarObraSociales(id, nombre);
+            return this.obrasSociales.editarObraSociales( nombre, descripcion, porcentaje_descuento, es_particular);
         } catch (error) {
             console.error("ERROR: error en  obrasSocialesModel al editar obrasSociales",error);
             throw new Error("Error al editar la obrasSociales");
@@ -66,4 +67,4 @@ export default class obrasSocialesService {
     }
 
 
-} }
+} 

@@ -9,9 +9,7 @@ export default class EspecialidadesService {
     listarEspecialidades = () => {
         try {
             return this.especialidades.listarEspecialidades();
-
         } catch (error) {
-
             console.error("ERROR: error en especialidadesService al listar especialidades",error);
             throw new Error("Error al obtener la lista de especialidades");
         }
@@ -33,19 +31,21 @@ export default class EspecialidadesService {
         }
     }
 
-    crearEspecialidad = (nombre) => {
+    crearEspecialidad = async (nombre) => {
         try {
-            return this.especialidades.crearEspecialidad(nombre);
+            const nuevo_id = await this.especialidades.crearEspecialidad(nombre);
+            return this.especialidades.obtenerPorId(nuevo_id);
         } catch (error) {
             console.error("ERROR: error en especialidadesService al crear especialidad",error);
             throw new Error("Error al crear la especialidad");
         }
     }
 
-    editarEspecialidad = (id, nombre) => {
+    editarEspecialidad = async (id, nombre) => {
         try {
-            if (!id || isNaN(parseInt(id))) {
-                throw new Error('ID inválido proporcionado');
+            const existe = await this.especialidades.obtenerPorId(id);
+            if (!existe || existe.length === 0) {
+                throw new Error(`No se encontró una especialidad con ID: ${id}`);
             }
             return this.especialidades.editarEspecialidad(id, nombre);
         } catch (error) {
@@ -56,8 +56,9 @@ export default class EspecialidadesService {
 
     eliminarEspecialidad = (id) => {
         try {
-            if (!id || isNaN(parseInt(id))) {
-                throw new Error('ID inválido proporcionado');
+            const existe = this.especialidades.obtenerPorId(id);
+            if (!existe || existe.length === 0) {
+                throw new Error(`No se encontró una especialidad con ID: ${id}`);
             }
             return this.especialidades.eliminarEspecialidad(id);
         } catch (error) {

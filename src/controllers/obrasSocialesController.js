@@ -1,4 +1,5 @@
 import ObrasSocialesService from "../services/obrasSocialesService.js";
+import { validationResult } from "express-validator";
 
 export default class ObrasSocialesController {
 
@@ -12,7 +13,7 @@ export default class ObrasSocialesController {
 
             res.status(200).json({
                 estado: "OK",
-                data
+                data: data
             });
 
         } catch (error) {
@@ -25,17 +26,26 @@ export default class ObrasSocialesController {
     }
 
     obtenerPorId = async (req, res) => {
+        const errores = validationResult(req);
+        
+                if (!errores.isEmpty()) {
+                    return res.status(400).json({
+                        estado: "ERROR",
+                        errores: errores.array()
+                    });
+                }
         try {
             const { id } = req.params;
 
-            const data = await this.service.obtenerPorId(id);
+            const data = await this.obrasSociales.obtenerPorId(id);
 
             res.status(200).json({
                 estado: "OK",
-                data
+                data: data
             });
 
         } catch (error) {
+            console.log(error);
             res.status(500).json({
                 estado: "ERROR",
                 mensaje: "Error al obtener obra social"
@@ -45,14 +55,17 @@ export default class ObrasSocialesController {
 
      crearObraSocial = async (req, res) => {
         try {
-            const data = await this.service. crearObraSocial(req.body);
+            const {nombre,descripcion,porcentaje_descuento,es_particular} = req.body;
+
+            const nuevaObraSocial = await this.obrasSociales.crearObraSocial(nombre, descripcion, porcentaje_descuento, es_particular);
 
             res.status(201).json({
                 estado: "OK",
-                data
+                data: nuevaObraSocial
             });
 
         } catch (error) {
+            console.log(error);
             res.status(500).json({
                 estado: "ERROR"
             });
@@ -61,7 +74,7 @@ export default class ObrasSocialesController {
 
      editarObraSociales = async (req, res) => {
         try {
-            const data = await this.service. editarObraSociales(
+            const data = await this.obrasSociales.editarObraSociales(
                 req.params.id,
                 req.body
             );
@@ -80,7 +93,7 @@ export default class ObrasSocialesController {
 
     eliminarObrasSociales= async (req, res) => {
         try {
-            const data = await this.service.eliminarObrasSociales (req.params.id);
+            const data = await this.obrasSociales.eliminarObrasSociales (req.params.id);
 
             res.status(200).json({
                 estado: "OK",

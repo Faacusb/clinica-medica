@@ -21,47 +21,44 @@ export default class ObrasSocialesModel {
         return rows;
     }
 
-    crearObraSociales = async (
+    crearObraSocial = async (
         nombre,
         descripcion,
         porcentaje_descuento,
-        es_particular,
-        activo = 1
+        es_particular
     ) => {
 
-        const [rows] = await conexion.execute(
+        //ya no va esto
+        /*const [rows] = await conexion.execute(
             "SELECT MAX(id_obra_social) AS maxId FROM obras_sociales"
         );
 
-        const nuevoId = (rows[0].maxId || 0) + 1;
+        const nuevoId = (rows[0].maxId || 0) + 1;*/
 
         const query = `
         INSERT INTO obras_sociales
         (
-            id_obra_social,
             nombre,
             descripcion,
             porcentaje_descuento,
-            es_particular,
-            activo
+            es_particular
          )
-        VALUES (?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ? )
         `;
 
         const [result] = await conexion.execute(
             query,
             [
-                nuevoId,
                 nombre,
                 descripcion,
                 porcentaje_descuento,
-                es_particular,
-                activo
+                es_particular
             ]
         );
 
-        return result;
+        return result.insertId;
     }
+
 
        editarObraSociales = async (
         id,
