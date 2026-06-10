@@ -27,25 +27,36 @@ export default class ObrasSocialesController {
 
     obtenerPorId = async (req, res) => {
         const errores = validationResult(req);
-        
-                if (!errores.isEmpty()) {
-                    return res.status(400).json({
-                        estado: "ERROR",
-                        errores: errores.array()
-                    });
-                }
+
+        if (!errores.isEmpty()) {
+            return res.status(400).json({
+                estado: "ERROR",
+                errores: errores.array()
+            });
+        }
+
         try {
+
             const { id } = req.params;
 
             const data = await this.obrasSociales.obtenerPorId(id);
 
+            if (!data || data.length === 0) {
+                return res.status(404).json({
+                    estado: "ERROR",
+                    mensaje: `Obra social con ID: ${id} no encontrada`
+                });
+            }
+
             res.status(200).json({
                 estado: "OK",
-                data: data
+                data
             });
 
         } catch (error) {
+
             console.log(error);
+
             res.status(500).json({
                 estado: "ERROR",
                 mensaje: "Error al obtener obra social"
@@ -53,7 +64,7 @@ export default class ObrasSocialesController {
         }
     }
 
-     crearObraSocial = async (req, res) => {
+    crearObraSocial = async (req, res) => {
         try {
             const {nombre,descripcion,porcentaje_descuento,es_particular} = req.body;
 
@@ -72,40 +83,106 @@ export default class ObrasSocialesController {
         }
     }
 
-     editarObraSociales = async (req, res) => {
+    editarObraSociales = async (req, res) => {
+
+        const errores = validationResult(req);
+
+        if (!errores.isEmpty()) {
+            return res.status(400).json({
+                estado: "ERROR",
+                errores: errores.array()
+            });
+        }
+
         try {
-            const data = await this.obrasSociales.editarObraSociales(
-                req.params.id,
-                req.body
-            );
+
+            const { id } = req.params;
+
+            const obraExistente =
+                await this.obrasSociales.obtenerPorId(id);
+
+            if (!obraExistente || obraExistente.length === 0) {
+                return res.status(404).json({
+                    estado: "ERROR",
+                    mensaje: `Obra social con ID: ${id} no encontrada`
+                });
+            }
+
+            const {
+                nombre,
+                descripcion,
+                porcentaje_descuento,
+                es_particular,
+                activo
+            } = req.body;
+
+            const data =
+                await this.obrasSociales.editarObraSociales(
+                    id,
+                    nombre,
+                    descripcion,
+                    porcentaje_descuento,
+                    es_particular,
+                    activo
+                );
 
             res.status(200).json({
                 estado: "OK",
+                mensaje: "Obra social actualizada exitosamente",
                 data
             });
 
         } catch (error) {
+
+            console.log(error);
+
             res.status(500).json({
-                estado: "ERROR"
+                estado: "ERROR",
+                mensaje: "Error al editar obra social"
             });
         }
     }
 
-    eliminarObrasSociales= async (req, res) => {
+    eliminarObrasSociales = async (req, res) => {
+
+        const errores = validationResult(req);
+
+        if (!errores.isEmpty()) {
+            return res.status(400).json({
+                estado: "ERROR",
+                errores: errores.array()
+            });
+        }
+
         try {
-            const data = await this.obrasSociales.eliminarObrasSociales (req.params.id);
+
+            const { id } = req.params;
+
+            const obraExistente =
+                await this.obrasSociales.obtenerPorId(id);
+
+            if (!obraExistente || obraExistente.length === 0) {
+                return res.status(404).json({
+                    estado: "ERROR",
+                    mensaje: `Obra social con ID: ${id} no encontrada`
+                });
+            }
+
+            await this.obrasSociales.eliminarObrasSociales(id);
 
             res.status(200).json({
                 estado: "OK",
-                data
+                mensaje: "Obra social eliminada exitosamente"
             });
 
         } catch (error) {
+
+            console.log(error);
+
             res.status(500).json({
-                estado: "ERROR"
+                estado: "ERROR",
+                mensaje: "Error al eliminar obra social"
             });
         }
     }
 }
-
-

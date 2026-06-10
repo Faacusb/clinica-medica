@@ -13,8 +13,17 @@ export default class ObrasSocialesModel {
     }
 
     obtenerPorId = async (id) => {
-        const query =
-            "SELECT * FROM obras_sociales WHERE id_obra_social = ? AND activo = 1";
+        const query = `
+            SELECT
+                id_obra_social,
+                nombre,
+                descripcion,
+                porcentaje_descuento,
+                es_particular
+            FROM obras_sociales
+            WHERE id_obra_social = ?
+            AND activo = 1
+        `;
 
         const [rows] = await conexion.execute(query, [id]);
 
@@ -28,22 +37,15 @@ export default class ObrasSocialesModel {
         es_particular
     ) => {
 
-        //ya no va esto
-        /*const [rows] = await conexion.execute(
-            "SELECT MAX(id_obra_social) AS maxId FROM obras_sociales"
-        );
-
-        const nuevoId = (rows[0].maxId || 0) + 1;*/
-
         const query = `
-        INSERT INTO obras_sociales
-        (
-            nombre,
-            descripcion,
-            porcentaje_descuento,
-            es_particular
-         )
-        VALUES (?, ?, ?, ? )
+            INSERT INTO obras_sociales
+            (
+                nombre,
+                descripcion,
+                porcentaje_descuento,
+                es_particular
+            )
+            VALUES (?, ?, ?, ?)
         `;
 
         const [result] = await conexion.execute(
@@ -56,10 +58,10 @@ export default class ObrasSocialesModel {
             ]
         );
 
-        return result.insertId;
+        return result;
     }
-
-
+        
+        
        editarObraSociales = async (
         id,
         nombre,
@@ -67,18 +69,17 @@ export default class ObrasSocialesModel {
         porcentaje_descuento,
         es_particular,
         activo
-
     ) => {
- 
+
         const query = `
-        UPDATE obras_sociales
-        SET
-            nombre = ?,
-            descripcion = ?,
-            porcentaje_descuento = ?,
-            es_particular = ?,
-            activo = ?
-        WHERE id_obra_social = ?
+            UPDATE obras_sociales
+            SET
+                nombre = ?,
+                descripcion = ?,
+                porcentaje_descuento = ?,
+                es_particular = ?,
+                activo = ?
+            WHERE id_obra_social = ?
         `;
 
         const [result] = await conexion.execute(
@@ -95,6 +96,7 @@ export default class ObrasSocialesModel {
 
         return result;
     }
+        
 
       eliminarObrasSociales  = async (id) => {
 
