@@ -28,7 +28,7 @@ export default class EspecialidadesModel {
     editarEspecialidad = async (id, nombre,) => {
         const query = 'UPDATE especialidades SET nombre = ? WHERE id_especialidad = ?';
         const [result] = await conexion.execute(query, [nombre, id]);
-        return result;
+        return id;
     }
 
     eliminarEspecialidad = async (id) => {
