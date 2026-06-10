@@ -39,6 +39,14 @@ export class JSendResponse {
             message: message
         };
     }
+
+    static formatJSendError(errors) {
+        const validationErrors = {};
+        errors.forEach((error) => {
+            validationErrors[error.path] = error.msg;
+        });
+        return JSendResponse.fail({ validation: validationErrors });
+    }
 }
 
 export default JSendResponse;

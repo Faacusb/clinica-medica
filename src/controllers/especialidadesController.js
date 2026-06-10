@@ -55,8 +55,8 @@ export default class EspecialidadesController {
 
             // Si es un error de validación o salón no encontrado, devolver fail
             if (error.message.includes('No se encontró')) {
-                return res.status(404).json(JSendResponse.fail({ 
-                    salon_id: error.message 
+                return res.status(404).json(JSendResponse.fail({
+                    especialidad: error.message
                 }));
             }
 
