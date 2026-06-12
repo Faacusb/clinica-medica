@@ -18,10 +18,6 @@ export default class EspecialidadesService {
 
     obtenerPorId = (id) => {
         try {
-            if (!id || isNaN(parseInt(id))) {
-                throw new Error('ID inválido proporcionado');
-            }
-
             return this.especialidades.obtenerPorId(id);
 
         } catch (error) {
@@ -34,7 +30,7 @@ export default class EspecialidadesService {
     crearEspecialidad = async (nombre) => {
         try {
             const nuevo_id = await this.especialidades.crearEspecialidad(nombre);
-            return this.especialidades.obtenerPorId(nuevo_id);
+            return await this.especialidades.obtenerPorId(nuevo_id);
         } catch (error) {
             console.error("ERROR: error en especialidadesService al crear especialidad",error);
             throw new Error("Error al crear la especialidad");
@@ -47,20 +43,21 @@ export default class EspecialidadesService {
             if (!existe || existe.length === 0) {
                 throw new Error(`No se encontró una especialidad con ID: ${id}`);
             }
-            return this.especialidades.editarEspecialidad(id, nombre);
+            const modificado = await this.especialidades.editarEspecialidad(id, nombre);
+            return await this.especialidades.obtenerPorId(id);
         } catch (error) {
             console.error("ERROR: error en especialidadesService al editar especialidad",error);
             throw new Error("Error al editar la especialidad");
         }
     }
 
-    eliminarEspecialidad = (id) => {
+    eliminarEspecialidad = async (id) => {
         try {
-            const existe = this.especialidades.obtenerPorId(id);
+            const existe = await this.especialidades.obtenerPorId(id);
             if (!existe || existe.length === 0) {
                 throw new Error(`No se encontró una especialidad con ID: ${id}`);
             }
-            return this.especialidades.eliminarEspecialidad(id);
+            return await this.especialidades.eliminarEspecialidad(id);
         } catch (error) {
             console.error("ERROR: error en especialidadesService al eliminar especialidad",error);
             throw new Error("Error al eliminar la especialidad");
