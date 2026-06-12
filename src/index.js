@@ -4,6 +4,7 @@ import especialidadesRouter from "./routes/v1/especialidadesRoutes.js";
 import usuariosRouter from "./routes/v1/usuariosRoute.js";
 import obrasSocialesRouter from "./routes/v1/obrasSocialesRoutes.js";
 import pacientesRouter from "./routes/v1/pacientesRoute.js";
+import medicosRouter from "./routes/v1/medicosRoutes.js";
 const app = express();
 
 // Middlewares globales
@@ -15,6 +16,7 @@ app.use('/v1/especialidades', especialidadesRouter);
 app.use('/v1/usuarios', usuariosRouter);
 app.use("/v1/obras-sociales", obrasSocialesRouter );
 app.use("/v1/pacientes", pacientesRouter);
+app.use("/v1/medicos", medicosRouter);
 process.loadEnvFile();
 
 const PUERTO = process.env.PORT;
