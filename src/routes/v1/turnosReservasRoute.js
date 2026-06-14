@@ -12,6 +12,11 @@ router.get(
 );
 
 router.get(
+    "/informe-pdf",
+    turnosReservasController.generarInformePDF
+);
+
+router.get(
     "/:id",
     param("id")
         .isInt()
@@ -39,5 +44,6 @@ router.delete(
         .withMessage("El ID debe ser numérico"),
     turnosReservasController.eliminarTurno
 );
+
 
 export default router;

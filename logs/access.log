@@ -1,1 +1,3 @@
 ::1 - - [14/Jun/2026:17:46:46 +0000] "GET /v1/usuarios HTTP/1.1" 200 1320 "-" "bruno-runtime/3.4.2"
+::1 - - [14/Jun/2026:23:07:23 +0000] "GET /v1/turnos-reservas/informe-pdf HTTP/1.1" 500 59 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+::1 - - [14/Jun/2026:23:07:23 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "http://localhost:3000/v1/turnos-reservas/informe-pdf" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
