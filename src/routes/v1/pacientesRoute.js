@@ -1,21 +1,24 @@
 import express from "express";
-import { param } from "express-validator";
+import apicache from "apicache";
 import PacientesController from "../../controllers/pacientesController.js";
+import { validarCampos, validarId } from "../../middleware/validationMiddleware.js";
 
 const router = express.Router();
+const cache = apicache.middleware;
 
 const pacientesController = new PacientesController();
 
 router.get(
     "/",
+    cache("5 minutes"),
     pacientesController.listarPacientes
 );
 
 router.get(
     "/:id",
-    param("id")
-        .isInt()
-        .withMessage("El ID debe ser numérico"),
+    cache("5 minutes"),
+    validarId,
+    validarCampos,
     pacientesController.obtenerPorId
 );
 
@@ -26,9 +29,8 @@ router.post(
 
 router.put(
     "/:id",
-    param("id")
-        .isInt()
-        .withMessage("El ID debe ser numérico"),
+    validarId,
+    validarCampos,
     pacientesController.editarPaciente
 );
 
