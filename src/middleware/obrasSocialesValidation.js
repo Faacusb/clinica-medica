@@ -6,9 +6,7 @@ export const validarObraSocial = [
         .notEmpty()
         .withMessage('El nombre es obligatorio')
         .isLength({ max: 120 })
-        .withMessage('El nombre no puede tener más de 120 caracteres')
-        .matches(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)
-        .withMessage('El nombre solo puede contener letras y espacios'),
+        .withMessage('El nombre no puede tener más de 120 caracteres'),
 
     body('descripcion')
         .trim()
@@ -31,3 +29,28 @@ export const validarObraSocial = [
         .withMessage('El valor debe ser 0 o 1')
     
 ]
+
+export const validarActualizacionObraSocial = [
+  body("nombre")
+    .optional({ checkFalsy: true }) 
+    .trim()
+    .isLength({ max: 120 })
+    .withMessage("El nombre no puede tener más de 120 caracteres"),
+
+  body("descripcion")
+    .optional({ checkFalsy: true })
+    .trim()
+    .isLength({ max: 255 })
+    .withMessage("La descripción no puede tener más de 255 caracteres"),
+
+  body("porcentaje_descuento")
+    .optional({ checkFalsy: true })
+    .isFloat({ min: 0, max: 100 })
+    .withMessage("El porcentaje de descuento debe ser un número entre 0 y 100")
+    .toFloat(),
+
+  body("es_particular")
+    .optional({ checkFalsy: true })
+    .isIn([0, 1])
+    .withMessage("El valor debe ser 0 o 1"),
+];

@@ -49,22 +49,12 @@ export default class ObrasSocialesController {
             res.status(201).json(JSendResponse.success(nuevaObraSocial));
 
         } catch (error) {
-            console.log(error);
+            console.error("ERROR: error al crear obra social",error);
             res.status(500).json(JSendResponse.error("Error interno del servidor al crear la obra social"));
         }
     }
 
     editarObraSociales = async (req, res) => {
-
-        const errores = validationResult(req);
-
-        if (!errores.isEmpty()) {
-            return res.status(400).json({
-                estado: "ERROR",
-                errores: errores.array()
-            });
-        }
-
         try {
 
             const { id } = req.params;
@@ -73,10 +63,7 @@ export default class ObrasSocialesController {
                 await this.obrasSociales.obtenerPorId(id);
 
             if (!obraExistente || obraExistente.length === 0) {
-                return res.status(404).json({
-                    estado: "ERROR",
-                    mensaje: `Obra social con ID: ${id} no encontrada`
-                });
+                return res.status(404).json(JSendResponse.error(`Obra social con ID: ${id} no encontrada`));
             }
 
             const {
@@ -86,8 +73,7 @@ export default class ObrasSocialesController {
                 es_particular
             } = req.body;
 
-            const data =
-                await this.obrasSociales.editarObraSociales(
+            const data = await this.obrasSociales.editarObraSociales(
                     id,
                     nombre,
                     descripcion,
@@ -95,63 +81,35 @@ export default class ObrasSocialesController {
                     es_particular
                 );
 
-            res.status(200).json({
-                estado: "OK",
-                mensaje: "Obra social actualizada exitosamente",
-                data
-            });
+            res.status(200).json(JSendResponse.success(data));
 
         } catch (error) {
 
-            console.log(error);
-
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al editar obra social"
-            });
+            console.error("ERROR: error al editar obra social",error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al editar la obra social"));
         }
     }
 
     eliminarObrasSociales = async (req, res) => {
-
-        const errores = validationResult(req);
-
-        if (!errores.isEmpty()) {
-            return res.status(400).json({
-                estado: "ERROR",
-                errores: errores.array()
-            });
-        }
-
         try {
-
             const { id } = req.params;
 
-            const obraExistente =
-                await this.obrasSociales.obtenerPorId(id);
+            const obraExistente = await this.obrasSociales.obtenerPorId(id);
 
             if (!obraExistente || obraExistente.length === 0) {
-                return res.status(404).json({
-                    estado: "ERROR",
-                    mensaje: `Obra social con ID: ${id} no encontrada`
-                });
+                return res.status(404).json(JSendResponse.error(`Obra social con ID: ${id} no encontrada`));
             }
 
-            await this.obrasSociales.eliminarObrasSociales(id);
+           const obraSocialEliminada = await this.obrasSociales.eliminarObrasSociales(id);
 
-            res.status(200).json({
-                estado: "OK",
-                mensaje: "Obra social eliminada exitosamente"
-            });
+            res.status(200).json(JSendResponse.success({ 
+                message: `Obra social con ID: ${id} eliminada exitosamente`
+            }));
 
         } catch (error) {
-
-            console.log(error);
-
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al eliminar obra social"
-            });
-        }
+            console.error("ERROR: error al eliminar obras sociales",error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al eliminar la obra social"));
+            };
+            
     }
 }

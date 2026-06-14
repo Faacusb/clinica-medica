@@ -47,25 +47,15 @@ export default class EspecialidadesController {
         try {
             const { id } = req.params;
             const { nombre } = req.body;
+            const especialidad = await this.especialidades.obtenerPorId(id);
+            if (!especialidad || especialidad.length === 0){
+                return res.status(404).json(JSendResponse.fail(`Especialidad con ID: ${id} no encontrada`));}
+
             const especialidadEditada = await this.especialidades.editarEspecialidad(id, nombre);
             
             res.status(200).json(JSendResponse.success(especialidadEditada));
         } catch (error) {
-            console.error("ERROR: error al editar especialidad",error);
-
-            // Si es un error de validación o salón no encontrado, devolver fail
-            if (error.message.includes('No se encontró')) {
-                return res.status(404).json(JSendResponse.fail({
-                    especialidad: error.message
-                }));
-            }
-
-            if (error.message.includes('Ya existe') || error.message.includes('debe ser mayor') || error.message.includes('ID inválido')) {
-                return res.status(400).json(JSendResponse.fail({ 
-                    validation: error.message 
-                }));
-            }
-            
+            console.error("ERROR: error al editar especialidad",error);            
             res.status(500).json(JSendResponse.error("Error interno del servidor al editar la especialidad"));
         }
     }
@@ -73,10 +63,13 @@ export default class EspecialidadesController {
     eliminarEspecialidad = async (req, res) => {
         try {
             const { id } = req.params;
+
+            const especialidad = await this.especialidades.obtenerPorId(id);
+            if (!especialidad || especialidad.length === 0){
+                return res.status(404).json(JSendResponse.fail(`Especialidad con ID: ${id} no encontrada`));}
+
             const especialidadEliminada = await this.especialidades.eliminarEspecialidad(id);
-            if (especialidadEliminada.affectedRows === 0) {
-                return res.status(404).json(JSendResponse.fail(`Especialidad con ID: ${id} no encontrada`));
-            }
+
             res.status(200).json(JSendResponse.success({ 
                 message: `Especialidad con ID: ${id} eliminada exitosamente`
             }));
