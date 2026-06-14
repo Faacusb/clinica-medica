@@ -39,10 +39,6 @@ export default class EspecialidadesService {
 
     editarEspecialidad = async (id, nombre) => {
         try {
-            const existe = await this.especialidades.obtenerPorId(id);
-            if (!existe || existe.length === 0) {
-                throw new Error(`No se encontró una especialidad con ID: ${id}`);
-            }
             const modificado = await this.especialidades.editarEspecialidad(id, nombre);
             return await this.especialidades.obtenerPorId(id);
         } catch (error) {

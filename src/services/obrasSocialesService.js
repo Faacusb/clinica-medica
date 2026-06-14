@@ -14,38 +14,40 @@ export default class ObrasSocialesService {
         return this.obrasSociales.obtenerPorId(id);
     }
 
-    crearObraSocial = (
+    crearObraSocial = async (
         nombre,
         descripcion,
         porcentaje_descuento,
         es_particular
     ) => {
 
-        return this.obrasSociales.crearObraSocial(
+        const nuevoId = await this.obrasSociales.crearObraSocial(
             nombre,
             descripcion,
             porcentaje_descuento,
             es_particular
         );
+
+        return this.obrasSociales.obtenerPorId(nuevoId);
     }
 
-    editarObraSociales = (
+    editarObraSociales = async (
         id,
         nombre,
         descripcion,
         porcentaje_descuento,
-        es_particular,
-        activo
+        es_particular
     ) => {
 
-        return this.obrasSociales.editarObraSociales(
+        const modificado = await this.obrasSociales.editarObraSociales(
             id,
             nombre,
             descripcion,
             porcentaje_descuento,
-            es_particular,
-            activo
+            es_particular
         );
+
+        return this.obrasSociales.obtenerPorId(modificado);
     }
 
     eliminarObrasSociales = (id) => {

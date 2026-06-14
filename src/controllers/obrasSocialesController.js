@@ -1,5 +1,6 @@
 import ObrasSocialesService from "../services/obrasSocialesService.js";
 import { validationResult } from "express-validator";
+import JSendResponse from "../utils/JSendResponse.js";
 
 export default class ObrasSocialesController {
 
@@ -10,59 +11,34 @@ export default class ObrasSocialesController {
     listarObrasSociales = async (req, res) => {
         try {
             const data = await this.obrasSociales.listarObrasSociales();
-
-            res.status(200).json({
-                estado: "OK",
-                data: data
-            });
+            res.status(200).json(JSendResponse.success(data));
 
         } catch (error) {
-           console.log(error);
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al obtener obras sociales"
-            });
+            console.log(error);
+            console.error("ERROR: error al listar Obras Sociales",error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al obtener la lista de Obras Sociales"));
         }
     }
 
     obtenerPorId = async (req, res) => {
-        const errores = validationResult(req);
-
-        if (!errores.isEmpty()) {
-            return res.status(400).json({
-                estado: "ERROR",
-                errores: errores.array()
-            });
-        }
-
         try {
 
             const { id } = req.params;
-
             const data = await this.obrasSociales.obtenerPorId(id);
 
             if (!data || data.length === 0) {
-                return res.status(404).json({
-                    estado: "ERROR",
-                    mensaje: `Obra social con ID: ${id} no encontrada`
-                });
+                return res.status(404).json(JSendResponse.error(`Obra social con ID: ${id} no encontrada`));
             }
 
-            res.status(200).json({
-                estado: "OK",
-                data
-            });
+            res.status(200).json(JSendResponse.success(data));
 
         } catch (error) {
-
             console.log(error);
-
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al obtener obra social"
-            });
+            console.error("ERROR: error al obtener obra social",error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al obtener la especialidad por ID"));
         }
     }
+           
 
     crearObraSocial = async (req, res) => {
         try {
@@ -70,16 +46,11 @@ export default class ObrasSocialesController {
 
             const nuevaObraSocial = await this.obrasSociales.crearObraSocial(nombre, descripcion, porcentaje_descuento, es_particular);
 
-            res.status(201).json({
-                estado: "OK",
-                data: nuevaObraSocial
-            });
+            res.status(201).json(JSendResponse.success(nuevaObraSocial));
 
         } catch (error) {
             console.log(error);
-            res.status(500).json({
-                estado: "ERROR"
-            });
+            res.status(500).json(JSendResponse.error("Error interno del servidor al crear la obra social"));
         }
     }
 
@@ -112,8 +83,7 @@ export default class ObrasSocialesController {
                 nombre,
                 descripcion,
                 porcentaje_descuento,
-                es_particular,
-                activo
+                es_particular
             } = req.body;
 
             const data =
@@ -122,8 +92,7 @@ export default class ObrasSocialesController {
                     nombre,
                     descripcion,
                     porcentaje_descuento,
-                    es_particular,
-                    activo
+                    es_particular
                 );
 
             res.status(200).json({

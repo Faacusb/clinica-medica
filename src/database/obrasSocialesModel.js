@@ -58,7 +58,7 @@ export default class ObrasSocialesModel {
             ]
         );
 
-        return result;
+        return result.insertId;
     }
         
         
@@ -67,8 +67,7 @@ export default class ObrasSocialesModel {
         nombre,
         descripcion,
         porcentaje_descuento,
-        es_particular,
-        activo
+        es_particular
     ) => {
 
         const query = `
@@ -77,8 +76,7 @@ export default class ObrasSocialesModel {
                 nombre = ?,
                 descripcion = ?,
                 porcentaje_descuento = ?,
-                es_particular = ?,
-                activo = ?
+                es_particular = ?
             WHERE id_obra_social = ?
         `;
 
@@ -89,12 +87,11 @@ export default class ObrasSocialesModel {
                 descripcion,
                 porcentaje_descuento,
                 es_particular,
-                activo,
                 id
             ]
         );
 
-        return result;
+        return id;
     }
         
 
