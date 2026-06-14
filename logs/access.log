@@ -1,0 +1,1 @@
+::1 - - [14/Jun/2026:17:46:46 +0000] "GET /v1/usuarios HTTP/1.1" 200 1320 "-" "bruno-runtime/3.4.2"

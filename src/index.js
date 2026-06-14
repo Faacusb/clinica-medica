@@ -1,5 +1,7 @@
 import express from 'express';
 import morgan from 'morgan'; 
+import fs from "fs";
+import path from "path";
 import especialidadesRouter from "./routes/v1/especialidadesRoutes.js";
 import usuariosRouter from "./routes/v1/usuariosRoute.js";
 import obrasSocialesRouter from "./routes/v1/obrasSocialesRoutes.js";
@@ -8,9 +10,20 @@ import medicosRouter from "./routes/v1/medicosRoutes.js";
 import turnosReservasRouter from "./routes/v1/turnosReservasRoute.js";
 const app = express();
 
+const logStream = fs.createWriteStream(
+    path.join("logs", "access.log"),
+    { flags: "a" }
+);
+
+
 // Middlewares globales
 app.use(express.json());
-app.use(morgan('dev')); // <-- 2. Registrar el middleware de Morgan
+app.use(morgan("dev")); // Muestra los logs en consola
+app.use(
+    morgan("combined", {
+        stream: logStream
+    })
+); // Guarda los logs en logs/access.log
 
 // Rutas
 app.use('/v1/especialidades', especialidadesRouter);
