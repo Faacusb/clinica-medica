@@ -65,13 +65,13 @@ export const validarUsuario = [
 
 export const validarActualizacionUsuario = [
     body("documento")
-        .optional() 
+        .optional({ checkFalsy: true })
         .trim()
         .isLength({ min: 8, max: 20 })
         .withMessage("El documento debe tener entre 8 y 20 caracteres"),
 
     body("apellido")
-        .optional()
+        .optional({ checkFalsy: true })
         .trim()
         .isLength({ max: 100 })
         .withMessage("El apellido no puede tener más de 100 caracteres")
@@ -79,7 +79,7 @@ export const validarActualizacionUsuario = [
         .withMessage("Los nombres solo pueden contener letras y espacios"),
 
     body("nombres")
-        .optional()
+        .optional({ checkFalsy: true })
         .trim()
         .isLength({ max: 100 })
         .withMessage("Los nombres no pueden tener más de 100 caracteres")
@@ -87,7 +87,7 @@ export const validarActualizacionUsuario = [
         .withMessage("Los nombres solo pueden contener letras y espacios"),
 
     body("email")
-        .optional()
+        .optional({ checkFalsy: true })
         .trim()
         .isLength({ max: 255 })
         .withMessage("El email no puede tener más de 255 caracteres")
@@ -102,13 +102,13 @@ export const validarActualizacionUsuario = [
         .withMessage("La contraseña debe tener entre 6 y 255 caracteres"),
 
     body("foto_path")
-        .optional({ nullable: true })
+        .optional({ nullable: true, checkFalsy: true })
         .trim()
         .isLength({ max: 255 })
         .withMessage("La URL de la foto debe tener máximo 255 caracteres"),
 
     body("rol")
-        .optional()
+        .optional({ checkFalsy: true })
         .trim()
         .isIn([1, 2, 3])
         .withMessage("El rol debe ser 1, 2 o 3"),

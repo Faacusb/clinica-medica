@@ -27,14 +27,6 @@ export default class MedicosController {
     }
 
     obtenerPorId = async (req, res) => {
-        const errores = validationResult(req);
-
-        if (!errores.isEmpty()) {
-            return res.status(400).json({
-                estado: "ERROR",
-                errores: errores.array()
-            });
-        }
 
         try {
             const { id } = req.params;
