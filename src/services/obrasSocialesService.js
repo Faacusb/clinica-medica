@@ -1,4 +1,5 @@
 import ObrasSocialesModel from "../database/obrasSocialesModel.js";
+import apicache from "apicache";
 
 export default class ObrasSocialesService {
 
@@ -27,7 +28,9 @@ export default class ObrasSocialesService {
             porcentaje_descuento,
             es_particular
         );
-
+        
+        apicache.clear();        
+        
         return this.obrasSociales.obtenerPorId(nuevoId);
     }
 
@@ -38,7 +41,6 @@ export default class ObrasSocialesService {
         porcentaje_descuento,
         es_particular
     ) => {
-
         const modificado = await this.obrasSociales.editarObraSociales(
             id,
             nombre,
@@ -47,11 +49,14 @@ export default class ObrasSocialesService {
             es_particular
         );
 
+        apicache.clear();
         return this.obrasSociales.obtenerPorId(modificado);
     }
 
-    eliminarObrasSociales = (id) => {
-        return this.obrasSociales.eliminarObrasSociales(id);
+    eliminarObrasSociales = async (id) => {
+        const eliminado = await this.obrasSociales.eliminarObrasSociales(id);
+        apicache.clear();
+        return eliminado;
     }
 
 }

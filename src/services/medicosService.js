@@ -1,4 +1,5 @@
 import MedicosModel from "../database/medicosModel.js";
+import apicache from "apicache";
 
 export default class MedicosService {
 
@@ -14,41 +15,45 @@ export default class MedicosService {
         return this.medicos.obtenerPorId(id);
     }
 
-    crearMedico = (
+    crearMedico = async (
         id_usuario,
         id_especialidad,
         matricula,
         valor_consulta,
         descripcion
     ) => {
-
-        return this.medicos.crearMedico(
+        const creado = await this.medicos.crearMedico(
             id_usuario,
             id_especialidad,
             matricula,
             valor_consulta,
             descripcion
         );
+        apicache.clear(); 
+        return creado
     }
 
-    editarMedico = (
+    editarMedico = async (
         id,
         id_especialidad,
         valor_consulta,
         descripcion,
         matricula
     ) => {
-
-        return this.medicos.editarMedico(
+        const editado = await this.medicos.editarMedico(
             id,
             id_especialidad,
             valor_consulta,
             descripcion,
             matricula
         );
+        apicache.clear(); 
+        return editado
     }
 
-    eliminarMedico = (id) => {
-        return this.medicos.eliminarMedico(id);
+    eliminarMedico = async (id) => {
+        const eliminado = await this.medicos.eliminarMedico(id);
+        apicache.clear();        
+        return eliminado
     }
 }

@@ -1,4 +1,5 @@
 import UsuariosModel from "../database/usuariosModel.js";
+import apicache from "apicache";
 
 export default class UsuariosService {
 
