@@ -74,7 +74,7 @@ export default class UsuariosModel {
             rol
         ]);
 
-        return result;
+        return result.insertId;
     }
 
     editarUsuario = async (
@@ -112,7 +112,7 @@ export default class UsuariosModel {
             id
         ]);
 
-        return result;
+        return id;
     }
 
     eliminarUsuario = async (id) => {
