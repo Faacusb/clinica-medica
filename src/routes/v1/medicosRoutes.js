@@ -6,7 +6,7 @@ import { validarActualizacionMedico, validarMedico } from "../../middleware/medi
 import {
     autenticarJWT,
     autorizarRoles
-} from "../../middleware/authMiddleware.js";
+} from "../../middleware/authValidation.js";
 
 const router = express.Router();
 

@@ -6,7 +6,7 @@ import { validarActualizacionUsuario, validarUsuario } from "../../middleware/us
 import {
     autenticarJWT,
     autorizarRoles
-} from "../../middleware/authMiddleware.js";
+} from "../../middleware/authValidation.js";
 
 const router = express.Router();
 

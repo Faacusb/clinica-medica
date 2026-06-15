@@ -5,7 +5,7 @@ import { validarCampos, validarId } from "../../middleware/validationMiddleware.
 import {
     autenticarJWT,
     autorizarRoles
-} from "../../middleware/authMiddleware.js";
+} from "../../middleware/authValidation.js";
 
 const router = express.Router();
 const cache = apicache.middleware;

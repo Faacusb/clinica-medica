@@ -6,7 +6,7 @@ import { validarObraSocial, validarActualizacionObraSocial } from "../../middlew
 import {
     autenticarJWT,
     autorizarRoles
-} from "../../middleware/authMiddleware.js";
+} from "../../middleware/authValidation.js";
 
 const router = express.Router();
 const cache = apicache.middleware;
