@@ -60,4 +60,22 @@ router.delete(
     medicosController.eliminarMedico
 );
 
+router.get(
+    "/:id/obras-sociales",
+    autenticarJWT,
+    autorizarRoles(2, 3),
+    validarId,
+    validarCampos,
+    medicosController.listarObrasSocialesPorMedico
+);
+
+router.post(
+    "/:id/obras-sociales",
+    autenticarJWT,
+    autorizarRoles(3),
+    validarId,
+    validarCampos,
+    medicosController.asociarMedicoObrasSociales
+);
+
 export default router;

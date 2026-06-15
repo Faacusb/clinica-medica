@@ -108,4 +108,63 @@ export default class MedicosModel {
 
         return result;
     }
+
+    asociarMedicoObraSociales = async (id_medico, obras_sociales) => {
+        const conn = await conexion.getConnection();
+
+        try{
+            await conn.beginTransaction();
+            const queryExistentes = `
+            SELECT id_obra_social 
+            FROM medicos_obras_sociales 
+            WHERE id_medico = ?
+        `;
+            const [existentes] = await conn.execute(queryExistentes, [id_medico]);
+            const idsExistentes = existentes.map(os => os.id_obra_social);
+
+            let insertados = 0;
+
+            const queryInsert = `
+                INSERT INTO medicos_obras_sociales (id_medico, id_obra_social)
+                VALUES (?, ?)
+            `;
+
+            for (const os of obras_sociales) {
+                if (!idsExistentes.includes(os.id_obra_social)) {
+                    const [result] = await conn.execute(queryInsert, [id_medico, os.id_obra_social]);
+                    if (result.affectedRows > 0) insertados++;
+                }
+            }
+            for (const os of obras_sociales) {
+                if (!idsExistentes.includes(os.id_obra_social)) {
+                    const [result] = await conn.execute(queryInsert, [id_medico, os.id_obra_social]);
+                    if (result.affectedRows > 0) insertados++;
+                }
+            }
+
+            await conn.commit();
+            await conn.release();
+            return insertados;
+
+        }catch(error) {
+            await conn.rollback();
+            await conn.release();
+            throw error;    
+        }
+    } 
+
+    /*
+     Listar todas las obras sociales asociadas a un médico
+     */
+    listarObrasSocialesPorMedico = async (id) => {
+        const query = `
+            SELECT os.id_obra_social, os.nombre
+            FROM obras_sociales os
+            INNER JOIN medicos_obras_sociales mos
+            ON os.id_obra_social = mos.id_obra_social
+            WHERE mos.id_medico = ?
+        `;
+        const [rows] = await conexion.execute(query, [id]);
+        return rows;
+    }
 }

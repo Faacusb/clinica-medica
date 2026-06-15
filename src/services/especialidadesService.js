@@ -23,7 +23,7 @@ export default class EspecialidadesService {
     editarEspecialidad = async (id, nombre) => {
             const modificado = await this.especialidades.editarEspecialidad(id, nombre);
             apicache.clear();
-            return await this.especialidades.obtenerPorId(id);
+            return await this.especialidades.obtenerPorId(modificado);
     }
 
     eliminarEspecialidad = async (id) => {
