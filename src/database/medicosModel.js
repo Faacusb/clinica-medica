@@ -60,7 +60,7 @@ export default class MedicosModel {
             descripcion
         ]);
 
-        return result;
+        return result.insertId;
     }
 
     editarMedico = async (
@@ -88,7 +88,7 @@ export default class MedicosModel {
             id
         ]);
 
-        return result;
+        return id;
     }
 
     eliminarMedico = async (id) => {

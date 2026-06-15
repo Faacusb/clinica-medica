@@ -1,5 +1,6 @@
 import MedicosService from "../services/medicosService.js";
 import { validationResult } from "express-validator";
+import JSendResponse from "../utils/JSendResponse.js";
 
 export default class MedicosController {
 
@@ -11,18 +12,11 @@ export default class MedicosController {
         try {
             const data = await this.medicos.listarMedicos();
 
-            res.status(200).json({
-                estado: "OK",
-                data
-            });
+            res.status(200).json(JSendResponse.success(data));
 
         } catch (error) {
-            console.error("ERROR al listar médicos:", error);
-
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al obtener la lista de médicos"
-            });
+            console.error("ERROR: error al listar médicos:", error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al obtener la lista de médicos"));
         }
     }
 
@@ -34,24 +28,14 @@ export default class MedicosController {
             const medico = await this.medicos.obtenerPorId(id);
 
             if (!medico || medico.length === 0) {
-                return res.status(404).json({
-                    estado: "ERROR",
-                    mensaje: `Médico con ID: ${id} no encontrado`
-                });
+                return res.status(404).json(JSendResponse.error(`Médico con ID: ${id} no encontrado`));
             }
 
-            res.status(200).json({
-                estado: "OK",
-                data: medico[0]
-            });
+            res.status(200).json(JSendResponse.success(medico[0]));
 
         } catch (error) {
-            console.error("ERROR al obtener médico:", error);
-
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al obtener el médico"
-            });
+            console.error("ERROR: error al obtener médico:", error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al obtener el médico por ID"));
         }
     }
 
@@ -73,42 +57,22 @@ export default class MedicosController {
                 descripcion
             );
 
-            res.status(201).json({
-                estado: "OK",
-                mensaje: "Médico creado exitosamente",
-                data: nuevoMedico
-            });
+            res.status(201).json(JSendResponse.success(nuevoMedico));
 
         } catch (error) {
-            console.error("ERROR al crear médico:", error);
-
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al crear médico"
-            });
+            console.error("ERROR: error al crear médico:", error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al crear el médico"));
         }
     }
 
     editarMedico = async (req, res) => {
-        const errores = validationResult(req);
-
-        if (!errores.isEmpty()) {
-            return res.status(400).json({
-                estado: "ERROR",
-                errores: errores.array()
-            });
-        }
-
         try {
             const { id } = req.params;
 
             const medicoExistente = await this.medicos.obtenerPorId(id);
 
             if (!medicoExistente || medicoExistente.length === 0) {
-                return res.status(404).json({
-                    estado: "ERROR",
-                    mensaje: `Médico con ID: ${id} no encontrado`
-                });
+                return res.status(404).json(JSendResponse.fail("Médico con ID: ${id} no encontrado"));
             }
 
             const {
@@ -126,56 +90,28 @@ export default class MedicosController {
                 matricula
             );
 
-            res.status(200).json({
-                estado: "OK",
-                mensaje: "Médico actualizado exitosamente",
-                data: medicoEditado
-            });
+            res.status(200).json(JSendResponse.success(medicoEditado));
 
         } catch (error) {
-            console.error("ERROR al editar médico:", error);
-
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al editar médico"
-            });
+            console.error("ERROR: error al editar médico:", error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al editar el médico"));
         }
     }
 
     eliminarMedico = async (req, res) => {
-        const errores = validationResult(req);
-
-        if (!errores.isEmpty()) {
-            return res.status(400).json({
-                estado: "ERROR",
-                errores: errores.array()
-            });
-        }
-
         try {
             const { id } = req.params;
+            const medico = await this.medicos.obtenerPorId(id);
 
+            if (!medico || medico.length === 0){
+                return res.status(404).json(JSendResponse.fail(`Médico con ID: ${id} no encontrado`));}
             const result = await this.medicos.eliminarMedico(id);
 
-            if (!result) {
-                return res.status(404).json({
-                    estado: "ERROR",
-                    mensaje: `Médico con ID: ${id} no encontrado`
-                });
-            }
-
-            res.status(200).json({
-                estado: "OK",
-                mensaje: "Médico eliminado exitosamente"
-            });
+            res.status(200).json(JSendResponse.success("Médico eliminado exitosamente"));
 
         } catch (error) {
-            console.error("ERROR al eliminar médico:", error);
-
-            res.status(500).json({
-                estado: "ERROR",
-                mensaje: "Error al eliminar médico"
-            });
+            console.error("ERROR: error al eliminar médico:", error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al eliminar el médico"));
         }
     }
 }
