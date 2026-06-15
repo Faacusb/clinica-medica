@@ -22,7 +22,7 @@ export default class MedicosService {
         valor_consulta,
         descripcion
     ) => {
-        const creado = await this.medicos.crearMedico(
+        const nuevo_id = await this.medicos.crearMedico(
             id_usuario,
             id_especialidad,
             matricula,
@@ -30,7 +30,7 @@ export default class MedicosService {
             descripcion
         );
         apicache.clear(); 
-        return creado
+        return this.medicos.obtenerPorId(nuevo_id);
     }
 
     editarMedico = async (
@@ -48,12 +48,22 @@ export default class MedicosService {
             matricula
         );
         apicache.clear(); 
-        return editado
+        return this.medicos.obtenerPorId(modificado);
     }
 
     eliminarMedico = async (id) => {
         const eliminado = await this.medicos.eliminarMedico(id);
         apicache.clear();        
         return eliminado
+    }
+
+    asociarMedicoObrasSociales = async (id, obras_sociales) => {
+        const asociado = await this.medicos.asociarMedicoObraSociales(id, obras_sociales);
+        apicache.clear();
+        return asociado;
+    }
+
+    listarObrasSocialesPorMedico = async (id) => {
+        return this.medicos.listarObrasSocialesPorMedico(id);
     }
 }

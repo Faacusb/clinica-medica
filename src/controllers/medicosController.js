@@ -114,4 +114,59 @@ export default class MedicosController {
             res.status(500).json(JSendResponse.error("Error interno del servidor al eliminar el médico"));
         }
     }
+
+    asociarMedicoObrasSociales = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { obras_sociales } = req.body;
+
+        const medico = await this.medicos.obtenerPorId(id);
+
+        if (!medico || medico.length === 0) {
+            return res.status(404).json(
+                JSendResponse.fail({ medico: `Médico con ID ${id} no encontrado` })
+            );
+        }
+
+        const asociado = await this.medicos.asociarMedicoObrasSociales(id, obras_sociales);
+
+        if (asociado  === 0) {
+            return res.status(200).json(
+                JSendResponse.success({ mensaje: `No se agregaron nuevas obras sociales al médico con ID ${id}` })
+            );
+        }
+
+        res.status(200).json(
+            JSendResponse.success({ mensaje: `Se asociaron ${asociado} obras sociales al médico con ID ${id}` })
+        );
+
+
+    } catch (error) {
+        console.error("ERROR: error al asociar obras sociales al médico:", error);
+        res.status(500).json(
+            JSendResponse.error("Error interno del servidor al asociar obras sociales al médico")
+        );
+    }
+}
+
+
+    listarObrasSocialesPorMedico = async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            const medico = await this.medicos.obtenerPorId(id);
+
+            if (!medico || medico.length === 0) {
+            return res.status(404).json(
+                JSendResponse.fail({ medico: `Médico con ID ${id} no encontrado` })
+            );
+        }
+        
+            const obras_sociales = await this.medicos.listarObrasSocialesPorMedico(id);
+            res.status(200).json(JSendResponse.success(obras_sociales));
+        } catch (error) {
+            console.error("ERROR: error al listar las obras sociales por médico:", error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al listar las obras sociales por médico"));
+        }
+    }
 }
