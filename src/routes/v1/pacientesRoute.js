@@ -6,6 +6,8 @@ import {
     autenticarJWT,
     autorizarRoles
 } from "../../middleware/authValidation.js";
+import { validarActualizacionPaciente, validarPaciente } from "../../middleware/pacientesValidation.js";
+
 
 const router = express.Router();
 const cache = apicache.middleware;
@@ -34,6 +36,8 @@ router.post(
     "/",
     autenticarJWT,
     autorizarRoles(3),
+    validarPaciente,
+    validarCampos,
     pacientesController.crearPaciente
 );
 
@@ -42,6 +46,7 @@ router.put(
     autenticarJWT,
     autorizarRoles(3),
     validarId,
+    validarActualizacionPaciente,
     validarCampos,
     pacientesController.editarPaciente
 );

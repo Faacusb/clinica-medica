@@ -38,8 +38,8 @@ export const validarMedico = [
 export const validarActualizacionMedico = [
 
     body("id_especialidad")
+        .optional({ checkFalsy: true })
         .trim()
-        .notEmpty()
         .isInt({min: 1})
         .withMessage("El ID de especialidad debe ser un número entero positivo")
         .toInt(),
