@@ -127,4 +127,61 @@ export default class UsuariosModel {
 
         return result;
     }
+    
+    buscar = async (
+        email,
+        contrasenia
+    ) => {
+
+        const query = `
+            SELECT
+                id_usuario,
+                documento,
+                apellido,
+                nombres,
+                email,
+                foto_path,
+                rol
+            FROM usuarios
+            WHERE email = ?
+            AND contrasenia = ?
+            AND activo = 1
+        `;
+
+        const [rows] = await conexion.execute(
+            query,
+            [
+                email,
+                contrasenia
+            ]
+        );
+
+        return rows[0];
+    }
+
+    buscarPorId = async (
+        id_usuario
+    ) => {
+
+        const query = `
+            SELECT
+                id_usuario,
+                documento,
+                apellido,
+                nombres,
+                email,
+                foto_path,
+                rol
+            FROM usuarios
+            WHERE id_usuario = ?
+            AND activo = 1
+        `;
+
+        const [rows] = await conexion.execute(
+            query,
+            [id_usuario]
+        );
+
+        return rows[0];
+    }
 }

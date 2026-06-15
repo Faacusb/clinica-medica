@@ -2,6 +2,10 @@ import express from "express";
 import apicache from "apicache";
 import PacientesController from "../../controllers/pacientesController.js";
 import { validarCampos, validarId } from "../../middleware/validationMiddleware.js";
+import {
+    autenticarJWT,
+    autorizarRoles
+} from "../../middleware/authValidation.js";
 
 const router = express.Router();
 const cache = apicache.middleware;
@@ -10,12 +14,16 @@ const pacientesController = new PacientesController();
 
 router.get(
     "/",
+    autenticarJWT,
+    autorizarRoles(3),
     cache("5 minutes"),
     pacientesController.listarPacientes
 );
 
 router.get(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     cache("5 minutes"),
     validarId,
     validarCampos,
@@ -24,11 +32,15 @@ router.get(
 
 router.post(
     "/",
+    autenticarJWT,
+    autorizarRoles(3),
     pacientesController.crearPaciente
 );
 
 router.put(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     validarId,
     validarCampos,
     pacientesController.editarPaciente

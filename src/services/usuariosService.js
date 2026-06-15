@@ -7,24 +7,12 @@ export default class UsuariosService {
         this.usuarios = new UsuariosModel();
     }
 
-    listarUsuarios = () => {
-        try {
-            return this.usuarios.listarUsuarios();
-        } catch (error) {
-            console.error("ERROR: error en usuariosService al listar usuarios", error);
-            throw new Error("Error al obtener la lista de usuarios");
-        }
-        
+    listarUsuarios = async () => {
+        return await this.usuarios.listarUsuarios();
     }
 
-    obtenerPorId = (id) => {
-        try {
-            return this.usuarios.obtenerPorId(id);
-        } catch (error) {
-            console.error("ERROR: error en usuariosService al obtener usuario por ID", error);
-            throw new Error("Error al obtener el usuario por ID");
-        }
-        
+    obtenerPorId = async (id) => {
+        return await this.usuarios.obtenerPorId(id);
     }
 
     crearUsuario = async (
@@ -37,28 +25,23 @@ export default class UsuariosService {
         rol
     ) => {
 
-        try {
-            if (![1, 2, 3].includes(Number(rol))) {
+        if (![1, 2, 3].includes(Number(rol))) {
             throw new Error("Rol inválido");
-            }
-
-            const nuevo_id = await this.usuarios.crearUsuario(
-                documento,
-                apellido,
-                nombres,
-                email,
-                contrasenia,
-                foto_path,
-                rol
-            );
-
-            return this.usuarios.obtenerPorId(nuevo_id);
-        } catch (error) {
-            console.error("ERROR: error en usuariosService al crear usuario", error);
-            throw new Error("Error al crear el usuario");
         }
 
-        
+        const nuevo_id = await this.usuarios.crearUsuario(
+            documento,
+            apellido,
+            nombres,
+            email,
+            contrasenia,
+            foto_path,
+            rol
+        );
+
+        apicache.clear();
+
+        return await this.usuarios.obtenerPorId(nuevo_id);
     }
 
     editarUsuario = async (
@@ -71,37 +54,55 @@ export default class UsuariosService {
         foto_path,
         rol
     ) => {
-        try {
-            const existe = await this.usuarios.obtenerPorId(id);
-            if (!existe || existe.length === 0) {
-                throw new Error(`No se encontró un usuario con ID: ${id}`);
-            }
 
-            const modificado = await this.usuarios.editarUsuario(
-                id,
-                documento,
-                apellido,
-                nombres,
-                email,
-                contrasenia,
-                foto_path,
-                rol
-            );
-            
-            return await this.usuarios.obtenerPorId(id);
-        } catch (error) {
-            console.error("ERROR: error en usuariosService al editar usuario", error);
-            throw new Error("Error al editar el usuario");
+        const existe = await this.usuarios.obtenerPorId(id);
+
+        if (!existe || existe.length === 0) {
+            throw new Error(`No se encontró un usuario con ID: ${id}`);
         }
-        
+
+        await this.usuarios.editarUsuario(
+            id,
+            documento,
+            apellido,
+            nombres,
+            email,
+            contrasenia,
+            foto_path,
+            rol
+        );
+
+        apicache.clear();
+
+        return await this.usuarios.obtenerPorId(id);
     }
 
-    eliminarUsuario = async(id) => {
-        try {
-            return await this.usuarios.eliminarUsuario(id);
-        } catch (error) {
-            console.error("ERROR: error en usuariosService al eliminar usuario", error);
-            throw new Error("Error al eliminar el usuario");
-        }   
+    eliminarUsuario = async (id) => {
+
+        const eliminado = await this.usuarios.eliminarUsuario(id);
+
+        apicache.clear();
+
+        return eliminado;
+    }
+
+    buscar = async (
+        email,
+        contrasenia
+    ) => {
+
+        return await this.usuarios.buscar(
+            email,
+            contrasenia
+        );
+    }
+
+    buscarPorId = async (
+        id_usuario
+    ) => {
+
+        return await this.usuarios.buscarPorId(
+            id_usuario
+        );
     }
 }

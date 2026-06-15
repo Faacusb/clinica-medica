@@ -13,10 +13,10 @@
   "license": "ISC",
   "author": "Joaquin,Emiliano.Mariano,Malena,Facundo",
   "type": "module",
-  "main": "index.js",
+  "main": "servidor.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+    "start": "node src/servidor.js"
   },
   "dependencies": {
     "apicache": "^1.6.3",
@@ -26,6 +26,9 @@
     "express-validator": "^7.3.2",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
-    "mysql2": "^3.22.2"
+    "mysql2": "^3.22.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0"
   }
 }
