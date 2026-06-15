@@ -16,12 +16,16 @@ const pacientesController = new PacientesController();
 
 router.get(
     "/",
+    autenticarJWT,
+    autorizarRoles(3),
     cache("5 minutes"),
     pacientesController.listarPacientes
 );
 
 router.get(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     cache("5 minutes"),
     validarId,
     validarCampos,
@@ -39,6 +43,8 @@ router.post(
 
 router.put(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     validarId,
     validarActualizacionPaciente,
     validarCampos,

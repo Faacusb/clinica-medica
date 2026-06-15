@@ -1,7 +1,13 @@
+import passport from "passport";
+import {
+    estrategia,
+    validacion
+} from "./config/passport.js";
 import express from 'express';
 import morgan from 'morgan'; 
 import fs from "fs";
 import path from "path";
+import authRouter from "./routes/v1/authRoutes.js";
 import especialidadesRouter from "./routes/v1/especialidadesRoutes.js";
 import usuariosRouter from "./routes/v1/usuariosRoute.js";
 import obrasSocialesRouter from "./routes/v1/obrasSocialesRoutes.js";
@@ -15,9 +21,12 @@ const logStream = fs.createWriteStream(
     { flags: "a" }
 );
 
-
 // Middlewares globales
 app.use(express.json());
+passport.use("login", estrategia);
+passport.use("jwt", validacion);
+
+app.use(passport.initialize());
 app.use(morgan("dev")); // Muestra los logs en consola
 app.use(
     morgan("combined", {
@@ -26,16 +35,13 @@ app.use(
 ); // Guarda los logs en logs/access.log
 
 // Rutas
+app.use("/v1/auth", authRouter);
 app.use('/v1/especialidades', especialidadesRouter);
 app.use('/v1/usuarios', usuariosRouter);
 app.use("/v1/obras-sociales", obrasSocialesRouter );
 app.use("/v1/pacientes", pacientesRouter);
 app.use("/v1/medicos", medicosRouter);
 app.use("/v1/turnos-reservas", turnosReservasRouter);
-process.loadEnvFile();
 
-const PUERTO = process.env.PORT;
 
-app.listen(PUERTO || 3000, () => {
-    console.log(`Servidor iniciado OK en puerto ${PUERTO || 3000}`);
-});
+export default app;

@@ -3,6 +3,10 @@ import apicache from "apicache";
 import ObrasSocialesController from "../../controllers/obrasSocialesController.js";
 import { validarCampos, validarId } from "../../middleware/validationMiddleware.js";
 import { validarObraSocial, validarActualizacionObraSocial } from "../../middleware/obrasSocialesValidation.js";
+import {
+    autenticarJWT,
+    autorizarRoles
+} from "../../middleware/authValidation.js";
 
 const router = express.Router();
 const cache = apicache.middleware;
@@ -11,12 +15,16 @@ const obrasSocialesController = new ObrasSocialesController();
 
 router.get(
     "/",
+    autenticarJWT,
+    autorizarRoles(3),
     cache("5 minutes"),
     obrasSocialesController.listarObrasSociales
 );
 
 router.get(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     cache("5 minutes"),
     validarId,
     validarCampos,
@@ -25,6 +33,8 @@ router.get(
 
 router.post(
     "/",
+    autenticarJWT,
+    autorizarRoles(3),
     validarObraSocial,
     validarCampos,
     obrasSocialesController.crearObraSocial
@@ -32,6 +42,8 @@ router.post(
 
 router.put(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     validarId,
     validarActualizacionObraSocial,
     validarCampos,
@@ -40,6 +52,8 @@ router.put(
 
 router.delete(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     validarId,
     validarCampos,
     obrasSocialesController.eliminarObrasSociales

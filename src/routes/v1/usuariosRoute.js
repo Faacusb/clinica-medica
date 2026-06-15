@@ -3,6 +3,10 @@ import apicache from "apicache";
 import UsuariosController from "../../controllers/usuariosController.js";
 import { validarCampos, validarId } from "../../middleware/validationMiddleware.js";
 import { validarActualizacionUsuario, validarUsuario } from "../../middleware/usuarioValidation.js";
+import {
+    autenticarJWT,
+    autorizarRoles
+} from "../../middleware/authValidation.js";
 
 const router = express.Router();
 
@@ -12,12 +16,16 @@ const usuariosController = new UsuariosController();
 
 router.get(
     "/",
+    autenticarJWT,
+    autorizarRoles(3),
     cache("5 minutes"),
     usuariosController.listarUsuarios
 );
 
 router.get(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     cache("5 minutes"),
     validarId,
     validarCampos,
@@ -26,6 +34,8 @@ router.get(
 
 router.post(
     "/",
+    autenticarJWT,
+    autorizarRoles(3),
     validarUsuario,
     validarCampos,
     usuariosController.crearUsuario
@@ -33,6 +43,8 @@ router.post(
 
 router.put(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     validarId,
     validarActualizacionUsuario,
     validarCampos,
@@ -41,6 +53,8 @@ router.put(
 
 router.delete(
     "/:id",
+    autenticarJWT,
+    autorizarRoles(3),
     validarId,
     validarCampos,
     usuariosController.eliminarUsuario
