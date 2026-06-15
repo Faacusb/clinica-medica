@@ -8,6 +8,15 @@ export const validarId= [
         .toInt()
 ]
 
+// Helper para formatear errores de validación en formato JSend
+export const formatJSendError = (errors) => {
+    const formattedErrors = {};
+    errors.forEach(error => {
+        formattedErrors[error.path] = error.msg;
+    });
+    return formattedErrors;
+};
+
 export const validarCampos = (req, res, next) => {
     const errores = validationResult(req);
 
