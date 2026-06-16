@@ -128,3 +128,8 @@
 ::ffff:127.0.0.1 - - [16/Jun/2026:16:08:06 +0000] "PUT /v1/turnos-reservas/2 HTTP/1.1" 200 315 "-" "bruno-runtime/1.0"
 ::ffff:127.0.0.1 - - [16/Jun/2026:16:08:36 +0000] "PUT /v1/turnos-reservas/2 HTTP/1.1" 200 315 "-" "bruno-runtime/1.0"
 ::ffff:127.0.0.1 - - [16/Jun/2026:16:08:51 +0000] "PUT /v1/turnos-reservas/2 HTTP/1.1" 200 315 "-" "bruno-runtime/1.0"
+::ffff:127.0.0.1 - - [16/Jun/2026:20:00:41 +0000] "POST /v1/auth/login HTTP/1.1" 200 328 "-" "bruno-runtime/1.0"
+::ffff:127.0.0.1 - - [16/Jun/2026:20:01:34 +0000] "GET /v1/turnos-reservas/informe-pdf HTTP/1.1" 200 193 "-" "bruno-runtime/1.0"
+::1 - - [16/Jun/2026:20:01:52 +0000] "GET /reportes/informe-turnos-1781640094074.pdf HTTP/1.1" 200 2709 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0"
+::ffff:127.0.0.1 - - [16/Jun/2026:20:38:07 +0000] "POST /v1/auth/login HTTP/1.1" 500 106 "-" "bruno-runtime/1.0"
+::ffff:127.0.0.1 - - [16/Jun/2026:20:38:36 +0000] "POST /v1/auth/login HTTP/1.1" 500 106 "-" "bruno-runtime/1.0"

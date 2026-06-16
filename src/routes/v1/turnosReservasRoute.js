@@ -1,11 +1,12 @@
 import express from "express";
-import { param } from "express-validator";
 import TurnosReservasController from "../../controllers/turnosReservasController.js";
 import { validarCampos, validarId } from "../../middleware/validationMiddleware.js";
 import {autenticarJWT,autorizarRoles} from "../../middleware/authValidation.js";
 import { validarActualizacionTurnoReserva, validarTurnoReserva } from "../../middleware/turnosReservasValidation.js";
+import apicache from "apicache";
 
 const router = express.Router();
+const cache = apicache.middleware;
 
 const turnosReservasController = new TurnosReservasController();
 
@@ -31,6 +32,7 @@ router.get(
     "/",
     autenticarJWT,
     autorizarRoles(3),
+    cache("5 minutes"),
     turnosReservasController.listarTurnos
 );
 
@@ -115,6 +117,7 @@ router.get(
     "/:id",
     autenticarJWT,
     autorizarRoles(3),
+    cache("5 minutes"),
     validarId,
     validarCampos,
     turnosReservasController.obtenerPorId
