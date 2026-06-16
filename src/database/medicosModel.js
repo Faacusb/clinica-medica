@@ -153,9 +153,7 @@ export default class MedicosModel {
         }
     } 
 
-    /*
-     Listar todas las obras sociales asociadas a un médico
-     */
+    
     listarObrasSocialesPorMedico = async (id) => {
         const query = `
             SELECT os.id_obra_social, os.nombre
@@ -167,4 +165,27 @@ export default class MedicosModel {
         const [rows] = await conexion.execute(query, [id]);
         return rows;
     }
+
+
+    listarMedicosPorEspecialidad = async (id) => {
+    const query = `
+        SELECT 
+            m.id_medico,
+            m.id_usuario,
+            m.id_especialidad,
+            m.matricula,
+            m.descripcion,
+            m.valor_consulta,
+            u.apellido,
+            u.nombres,
+            e.nombre AS nombre_especialidad
+        FROM medicos m
+        INNER JOIN usuarios u ON m.id_usuario = u.id_usuario
+        INNER JOIN especialidades e ON m.id_especialidad = e.id_especialidad
+        WHERE m.id_especialidad = ?
+        AND u.activo = 1
+    `;
+    const [rows] = await conexion.execute(query, [id]);
+    return rows;
+}
 }
