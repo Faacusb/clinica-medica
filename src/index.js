@@ -5,6 +5,8 @@ import {
 } from "./config/passport.js";
 import express from 'express';
 import morgan from 'morgan'; 
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 import fs from "fs";
 import path from "path";
 import authRouter from "./routes/v1/authRoutes.js";
@@ -22,6 +24,11 @@ const logStream = fs.createWriteStream(
 );
 
 // Middlewares globales
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec)
+);
 app.use(express.json());
 passport.use("login", estrategia);
 passport.use("jwt", validacion);
