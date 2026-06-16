@@ -41,6 +41,9 @@ app.use(
     })
 ); // Guarda los logs en logs/access.log
 
+//Ruta para reportes
+app.use("/reportes", express.static("public/reportes"));
+
 // Rutas
 app.use("/v1/auth", authRouter);
 app.use('/v1/especialidades', especialidadesRouter);
