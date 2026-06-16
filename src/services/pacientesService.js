@@ -25,7 +25,7 @@ export default class PacientesService {
             id_obra_social
         );
         apicache.clear();
-        return creado;
+        return this.pacientes.obtenerPorId(creado);
 
     }
 
@@ -41,6 +41,6 @@ export default class PacientesService {
             id_obra_social
         );
         apicache.clear();
-        return modificado;
+        return this.pacientes.obtenerPorId(modificado);
     }
 }

@@ -66,7 +66,7 @@ export default class PacientesModel {
             [id_usuario, id_obra_social]
         );
 
-        return result;
+        return result.insertId;
     }
 
     editarPaciente = async (
@@ -88,7 +88,7 @@ export default class PacientesModel {
             [id_usuario, id_obra_social, id]
         );
 
-        return result;
+        return id;
     }
 
  

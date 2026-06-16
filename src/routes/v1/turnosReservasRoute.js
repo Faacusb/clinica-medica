@@ -3,6 +3,7 @@ import { param } from "express-validator";
 import TurnosReservasController from "../../controllers/turnosReservasController.js";
 import { validarCampos, validarId } from "../../middleware/validationMiddleware.js";
 import {autenticarJWT,autorizarRoles} from "../../middleware/authValidation.js";
+import { validarActualizacionTurnoReserva, validarTurnoReserva } from "../../middleware/turnosReservasValidation.js";
 
 const router = express.Router();
 
@@ -164,6 +165,8 @@ router.post(
     "/",
     autenticarJWT,
     autorizarRoles(3),
+    validarTurnoReserva,
+    validarCampos,
     turnosReservasController.crearTurno
 );
 
@@ -216,6 +219,7 @@ router.put(
     autenticarJWT,
     autorizarRoles(3),
     validarId,
+    validarActualizacionTurnoReserva,
     validarCampos,
     turnosReservasController.editarTurno
 );
