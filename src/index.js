@@ -1,8 +1,5 @@
 import passport from "passport";
-import {
-    estrategia,
-    validacion
-} from "./config/passport.js";
+import {estrategia,validacion} from "./config/passport.js";
 import express from 'express';
 import morgan from 'morgan'; 
 import swaggerUi from "swagger-ui-express";
@@ -16,7 +13,11 @@ import obrasSocialesRouter from "./routes/v1/obrasSocialesRoutes.js";
 import pacientesRouter from "./routes/v1/pacientesRoute.js";
 import medicosRouter from "./routes/v1/medicosRoutes.js";
 import turnosReservasRouter from "./routes/v1/turnosReservasRoute.js";
+import cors from "cors";
+
 const app = express();
+
+app.use(cors());
 
 const logStream = fs.createWriteStream(
     path.join("logs", "access.log"),
