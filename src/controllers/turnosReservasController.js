@@ -1,5 +1,6 @@
 import TurnosReservasService from "../services/turnosReservasService.js";
 import { validationResult } from "express-validator";
+import PDFDocument from "pdfkit";
 
 export default class TurnosReservasController {
 
@@ -27,6 +28,57 @@ export default class TurnosReservasController {
             });
         }
     }
+
+    generarInformePDF = async (req, res) => {
+
+        try {
+
+            const turnos = await this.turnos.listarTurnos();
+
+            const doc = new PDFDocument();
+
+            res.setHeader("Content-Type", "application/pdf");
+            res.setHeader(
+                "Content-Disposition",
+                "attachment; filename=informe-turnos.pdf"
+            );
+
+            doc.pipe(res);
+
+            doc.fontSize(20).text("INFORME DE TURNOS", {
+                align: "center"
+            });
+
+            doc.moveDown();
+
+            doc.fontSize(12).text(`Cantidad total de turnos: ${turnos.length}`);
+
+            doc.moveDown();
+
+            turnos.forEach((turno) => {
+
+                doc.text(`Turno #${turno.id_turno_reserva}`);
+                doc.text(`Paciente ID: ${turno.id_paciente}`);
+                doc.text(`Obra Social ID: ${turno.id_obra_social}`);
+                doc.text(`Fecha: ${turno.fecha_hora}`);
+                doc.text(`Valor Total: $${turno.valor_total}`);
+                doc.text(`Atendido: ${turno.atentido ? "SI" : "NO"}`);
+
+                doc.moveDown();
+            });
+
+            doc.end();
+
+        } catch (error) {
+
+            console.error("ERROR: error al generar informe PDF", error);
+
+            res.status(500).json({
+                estado: "ERROR",
+                mensaje: "Error al generar informe PDF"
+            });
+        }
+    }   
 
     obtenerPorId = async (req, res) => {
 

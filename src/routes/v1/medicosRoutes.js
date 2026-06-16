@@ -302,4 +302,13 @@ router.post(
     medicosController.asociarMedicoObrasSociales
 );
 
+router.get(
+    "/especialidad/:id",
+    autenticarJWT,
+    autorizarRoles(2, 3),
+    validarId,
+    validarCampos,
+    medicosController.listarMedicosPorEspecialidad
+);
+
 export default router;

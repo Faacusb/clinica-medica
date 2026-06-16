@@ -12,6 +12,11 @@ router.get(
 );
 
 router.get(
+    "/informe-pdf",
+    turnosReservasController.generarInformePDF
+);
+
+router.get(
     "/:id",
     param("id")
         .isInt()
