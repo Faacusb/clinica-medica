@@ -169,4 +169,21 @@ export default class MedicosController {
             res.status(500).json(JSendResponse.error("Error interno del servidor al listar las obras sociales por médico"));
         }
     }
+
+    listarMedicosPorEspecialidad = async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            const medicos = await this.medicos.listarMedicosPorEspecialidad(id);
+
+            if (medicos.length === 0) {
+                return res.status(404).json(JSendResponse.fail(`No se encontraron médicos para la especialidad con ID ${id}`));
+            }
+            
+            res.status(200).json(JSendResponse.success(medicos));
+        } catch (error) {
+            console.error("ERROR: error al listar médicos por especialidad:", error);
+            res.status(500).json(JSendResponse.error("Error interno del servidor al listar médicos por especialidad"));
+        }
+    }
 }

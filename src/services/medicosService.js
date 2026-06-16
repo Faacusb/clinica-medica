@@ -66,4 +66,8 @@ export default class MedicosService {
     listarObrasSocialesPorMedico = async (id) => {
         return this.medicos.listarObrasSocialesPorMedico(id);
     }
+
+    listarMedicosPorEspecialidad = async (id) => {
+        return this.medicos.listarMedicosPorEspecialidad(id);
+    }
 }
