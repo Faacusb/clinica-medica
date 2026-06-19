@@ -1,7 +1,8 @@
 import TurnosReservasService from "../services/turnosReservasService.js";
-import { validationResult } from "express-validator";
 import PDFDocument from "pdfkit";
 import JSendResponse from "../utils/JSendResponse.js";
+import fs from "fs";
+import path from "path";
 
 export default class TurnosReservasController {
 
@@ -22,21 +23,27 @@ export default class TurnosReservasController {
         }
     }
 
-    generarInformePDF = async (req, res) => {
-
+   generarInformePDF = async (req, res) => {
         try {
-
             const turnos = await this.turnos.listarTurnos();
 
-            const doc = new PDFDocument();
+            const carpetaReportes = path.join(process.cwd(), "public", "reportes");
 
-            res.setHeader("Content-Type", "application/pdf");
-            res.setHeader(
-                "Content-Disposition",
-                "attachment; filename=informe-turnos.pdf"
-            );
+            if (!fs.existsSync(carpetaReportes)) {
+                fs.mkdirSync(carpetaReportes, { recursive: true });
+            }
 
-            doc.pipe(res);
+            const nombreArchivo = `informe-turnos-${Date.now()}.pdf`;
+            const rutaArchivo = path.join(carpetaReportes, nombreArchivo);
+
+            const doc = new PDFDocument({
+                margin: 40,
+                size: "A4"
+            });
+
+            const stream = fs.createWriteStream(rutaArchivo);
+
+            doc.pipe(stream);
 
             doc.fontSize(20).text("INFORME DE TURNOS", {
                 align: "center"
@@ -49,24 +56,46 @@ export default class TurnosReservasController {
             doc.moveDown();
 
             turnos.forEach((turno) => {
-
-                doc.text(`Turno #${turno.id_turno_reserva}`);
+                doc.fontSize(12).text(`Turno #${turno.id_turno_reserva}`);
                 doc.text(`Paciente ID: ${turno.id_paciente}`);
                 doc.text(`Obra Social ID: ${turno.id_obra_social}`);
                 doc.text(`Fecha: ${turno.fecha_hora}`);
                 doc.text(`Valor Total: $${turno.valor_total}`);
-                doc.text(`Atendido: ${turno.atentido ? "SI" : "NO"}`);
+                doc.text(`Atendido: ${turno.atendido ? "SI" : "NO"}`);
 
                 doc.moveDown();
             });
 
             doc.end();
 
+            stream.on("finish", () => {
+                const baseUrl = `${req.protocol}://${req.get("host")}`;
+                const url = `${baseUrl}/reportes/${nombreArchivo}`;
+
+                return res.status(200).json(
+                    JSendResponse.success({
+                        mensaje: "Informe PDF generado correctamente",
+                        archivo: nombreArchivo,
+                        url
+                    })
+                );
+            });
+
+            stream.on("error", (error) => {
+                console.error("ERROR: error al guardar informe PDF", error);
+
+                return res.status(500).json(
+                    JSendResponse.error("Error interno del servidor al guardar informe PDF")
+                );
+            });
         } catch (error) {
             console.error("ERROR: error al generar informe PDF", error);
-            res.status(500).json(JSendResponse.error("Error interno del servidor al generar informe PDF"));
+
+            return res.status(500).json(
+                JSendResponse.error("Error interno del servidor al generar informe PDF")
+            );
         }
-    }   
+    }
 
     obtenerPorId = async (req, res) => {
         try {
